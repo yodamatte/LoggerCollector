@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerCollector.UI", "LoggerCollector.UI\LoggerCollector.UI.csproj", "{6A64D929-0557-4772-9B4B-748AA0817F2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadFileShare", "ReadFileShare\ReadFileShare.csproj", "{3BC9D49D-9223-4566-81EA-297ACC81ACCF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A64D929-0557-4772-9B4B-748AA0817F2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A64D929-0557-4772-9B4B-748AA0817F2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A64D929-0557-4772-9B4B-748AA0817F2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A64D929-0557-4772-9B4B-748AA0817F2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BC9D49D-9223-4566-81EA-297ACC81ACCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BC9D49D-9223-4566-81EA-297ACC81ACCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BC9D49D-9223-4566-81EA-297ACC81ACCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BC9D49D-9223-4566-81EA-297ACC81ACCF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FDDD01E3-9BBB-4E30-A6E4-8485187A8AA9}
+	EndGlobalSection
+EndGlobal
