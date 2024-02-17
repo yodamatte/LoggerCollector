@@ -1,12 +1,10 @@
 ﻿
 namespace ReadFileShare;
+
+
 public class FileReader
 {
-    private readonly EventHandler<string> _newLineEvent;
-    public FileReader(EventHandler<string> newLineEvent) 
-    {
-        _newLineEvent = newLineEvent;
-    }
+    public event EventHandler<string> NewLineEvent;
 
     public async Task ReadFromFileWithoutFileShare(string filePath, CancellationToken cancellationToken)
     {
@@ -18,13 +16,13 @@ public class FileReader
         while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
         {
             line = await reader.ReadLineAsync();
-            ProgressResult(line);
+            OnNewLineEvent(line);
         }
     }
 
-    private void ProgressResult(string line)
+    protected virtual void OnNewLineEvent(string line)
     {
-        _newLineEvent?.Invoke(this, line);
+        NewLineEvent?.Invoke(this, line);
     }
 
     public async Task ReadFromFile(string filePath, CancellationToken cancellationToken)
@@ -48,7 +46,7 @@ public class FileReader
                 fs.Seek(0, SeekOrigin.Begin); // Move the stream pointer to the beginning
                 while ((line = await reader.ReadLineAsync()) != null)
                 {
-                    ProgressResult(line);
+                    OnNewLineEvent(line);
                 }
             }
             else

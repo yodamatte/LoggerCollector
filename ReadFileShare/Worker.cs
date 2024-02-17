@@ -3,55 +3,37 @@ namespace ReadFileShare;
 
 public class Worker
 {
-    public async Task Run(string filePath)
+    public bool Running { get; private set; }
+    public async Task Run(string filePath, CancellationTokenSource cts, EventHandler<string> eventHandler)
     {
-        // Create an event to notify when a new line is available
-        EventHandler<string> newLineEvent = HandleNewLine;
+        Running = true;
 
-        var fileWriter = new FileWriter();
-        var fileReader = new FileReader(newLineEvent);
+        try
+        {
+            var fileWriter = new FileWriter();
+            var fileReader = new FileReader();
 
-        // Create cancellation token for the main thread
-        CancellationTokenSource cancellationTokenSource = new();
-        CancellationToken cancellationToken = cancellationTokenSource.Token;
+            fileReader.NewLineEvent += eventHandler;
 
-        // Start the writing and reading tasks concurrently
-        Task writingTask = Task.Run(() => fileWriter.FillFileWithData(filePath, cancellationToken));
-        Task readingTask = Task.Run(() => fileReader.ReadFromFile(filePath, cancellationToken));
+            // Create cancellation token for the main thread
+            CancellationToken cancellationToken = cts.Token;
 
-        await SetupCancellationListener(cancellationTokenSource);
+            // Start the writing and reading tasks concurrently
+            Task writingTask = Task.Run(() => fileWriter.FillFileWithData(filePath, cancellationToken));
+            Task readingTask = Task.Run(() => fileReader.ReadFromFile(filePath, cancellationToken));
 
-        // Wait for either tasks to complete
-        await Task.WhenAny(writingTask, readingTask);
 
-        // Cancel the remaining task
-        cancellationTokenSource.Cancel();
+            // Wait for either tasks to complete
+            await Task.WhenAny(writingTask, readingTask);
+
+            // Cancel the remaining task
+            cts.Cancel();
+        }
+        catch (OperationCanceledException ex) 
+        { 
+            Running = false;
+        }
 
         Console.WriteLine("Main thread exiting...");
-    }
-
-    private void HandleNewLine(object sender, string line)
-    {
-        Console.WriteLine($"New line: {line}");
-    }
-
-    private async Task SetupCancellationListener(CancellationTokenSource cancellationTokenSource)
-    {
-        // Listen for cancellation shortcut (Escape key)
-        Task cancellationListener = Task.Run(() =>
-        {
-            Console.WriteLine("Press Escape key to cancel...");
-            while (true)
-            {
-                if (Console.ReadKey(true).Key == ConsoleKey.Escape)
-                {
-                    cancellationTokenSource.Cancel();
-                    Console.WriteLine("Cancellation requested.");
-                    break;
-                }
-            }
-        });
-        // Wait for cancellation listener to complete
-        await cancellationListener;
     }
 }

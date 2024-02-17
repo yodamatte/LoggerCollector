@@ -7,7 +7,17 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <ItemsControl ItemsSource="{Binding LogEntries}">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Button Content="Run" Command="{Binding RunCommandAsync}"/>
+            <Button Content="Cancel" Command="{Binding CancelCommandAsync}"/>
+        </StackPanel>
+
+        <ItemsControl ItemsSource="{Binding LogEntries}" Grid.Row="1">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
