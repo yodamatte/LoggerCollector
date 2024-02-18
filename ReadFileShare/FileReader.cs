@@ -31,16 +31,17 @@ public class FileReader
     {
         try
         {
-            while (!cancellationToken.IsCancellationRequested)
+            while (true)
             {
-                using (FileStream fs = new(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                using (StreamReader reader = new(fs))
-                {
-                    await ReadAndProcessFileContent(reader);
+                using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using StreamReader reader = new(fs);
+                await ReadAndProcessFileContent(reader, cancellationToken);
 
-                    // Check for file modification
-                    await WaitForFileModification(filePath, cancellationToken);
-                }
+                // Check for file modification
+                await WaitForFileModification(filePath, cancellationToken);
+
+                // Check for cancellation
+                cancellationToken.ThrowIfCancellationRequested();
             }
         }
         catch (TaskCanceledException)
@@ -48,10 +49,10 @@ public class FileReader
         }
     }
 
-    private async Task ReadAndProcessFileContent(StreamReader reader)
+    private async Task ReadAndProcessFileContent(StreamReader reader, CancellationToken cancellationToken)
     {
         string line;
-        while ((line = await reader.ReadLineAsync()) != null)
+        while ((line = await reader.ReadLineAsync(cancellationToken)) != null)
         {
             OnNewLineEvent(line);
         }
@@ -64,7 +65,7 @@ public class FileReader
 
         do
         {
-            await Task.Delay(1000, CancellationToken.None); // Wait until file is modified
+            await Task.Delay(1000, cancellationToken); // Wait until file is modified
             currentModified = File.GetLastWriteTime(filePath);
         } while (currentModified == lastModified && !cancellationToken.IsCancellationRequested);
     }

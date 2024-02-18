@@ -5,14 +5,14 @@ namespace LoggerCollector.UI.Commands
     public class RelayCommandAsync<T> : ICommand
     {
         private readonly Func<T, Task> _execute;
-        private readonly Func<T, Task<bool>> _canExecute;
+        private readonly Func<T, bool> _canExecute;
 
         public RelayCommandAsync(Func<T, Task> execute)
             : this(execute, null)
         {
         }
 
-        public RelayCommandAsync(Func<T, Task> execute, Func<T, Task<bool>> canExecute)
+        public RelayCommandAsync(Func<T, Task> execute, Func<T, bool> canExecute)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;

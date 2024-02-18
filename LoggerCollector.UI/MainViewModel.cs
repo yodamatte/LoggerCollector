@@ -48,10 +48,10 @@ namespace LoggerCollector.UI
             _cts.Cancel();
         }
 
-        private Task<bool> CanRun(string parameter)
+        private bool CanRun(string parameter)
         {
             Debug.WriteLine($"Can Run: {!_worker.Running}");
-            return Task.FromResult(!_worker.Running);
+            return !_worker.Running;
         }
 
         private async Task ExecuteRunCommand(string parameter)

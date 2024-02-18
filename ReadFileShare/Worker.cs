@@ -19,11 +19,8 @@ public class Worker
         try
         {
             // Start the writing and reading tasks concurrently
-            Task writingTask = Task.Run(() => fileWriter.FillFileWithData(filePath, cancellationToken));
-            Task readingTask = Task.Run(() => fileReader.ReadFromFile(filePath, cancellationToken));
-
-            // Wait for either tasks to complete
-            await Task.WhenAll(writingTask, readingTask);
+            //Task writingTask = Task.Run(() => fileWriter.FillFileWithData(filePath, cancellationToken));
+            await Task.Run(() => fileReader.ReadFromFile(filePath, cancellationToken));
         }
         catch (TaskCanceledException)
         {
