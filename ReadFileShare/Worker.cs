@@ -3,10 +3,10 @@ namespace ReadFileShare;
 
 public class Worker
 {
-    public bool Running { get; private set; }
+    public bool IsRunning { get; private set; }
     public async Task Run(string filePath, CancellationTokenSource cts, EventHandler<string> eventHandler)
     {
-        Running = true;
+        IsRunning = true;
 
         var fileReader = new FileReader();
 
@@ -27,7 +27,7 @@ public class Worker
         }
         finally
         {
-            Running = false;
+            IsRunning = false;
         }
     }
 }

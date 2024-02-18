@@ -5,31 +5,31 @@ namespace LoggerCollector.UI.Commands
     public class RelayCommandAsync<T> : ICommand
     {
         private readonly Func<T, Task> _execute;
-        private readonly Func<T, bool> _canExecute;
+        private readonly Predicate<T> _canExecute;
 
         public RelayCommandAsync(Func<T, Task> execute)
             : this(execute, null)
         {
         }
 
-        public RelayCommandAsync(Func<T, Task> execute, Func<T, bool> canExecute)
+        public RelayCommandAsync(Func<T, Task> execute, Predicate<T> canExecute)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
-        public event EventHandler CanExecuteChanged;
-
+        ///<summary>
+        ///Defines the method that determines whether the command can execute in its current state.
+        ///</summary>
+        ///<param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        ///<returns>
+        ///true if this command can be executed; otherwise, false.
+        ///</returns>
         public bool CanExecute(object parameter)
         {
-            if (_canExecute == null)
-                return true;
-
-            if (_canExecute is Func<T, Task<bool>> canExecute)
-                return canExecute((T)parameter).GetAwaiter().GetResult();
-
-            return true;
+            return _canExecute == null || _canExecute((T)parameter);
         }
+
 
         public async void Execute(object parameter)
         {
@@ -41,9 +41,13 @@ namespace LoggerCollector.UI.Commands
             await _execute(parameter);
         }
 
-        public void RaiseCanExecuteChanged()
+        ///<summary>
+        ///Occurs when changes occur that affect whether or not the command should execute.
+        ///</summary>
+        public event EventHandler CanExecuteChanged
         {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
     }
 

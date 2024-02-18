@@ -38,8 +38,8 @@ namespace LoggerCollector.UI
 
         private bool CanCancel(string parameter)
         {
-            Debug.WriteLine($"Can Cancel: {_worker.Running}");
-            return _worker.Running;
+            Debug.WriteLine($"Can Cancel: {_worker.IsRunning}");
+            return _worker.IsRunning;
         }
 
         private void ExecuteCancelCommand(string parameter)
@@ -50,8 +50,8 @@ namespace LoggerCollector.UI
 
         private bool CanRun(string parameter)
         {
-            Debug.WriteLine($"Can Run: {!_worker.Running}");
-            return !_worker.Running;
+            Debug.WriteLine($"Can Run: {!_worker.IsRunning}");
+            return !_worker.IsRunning;
         }
 
         private async Task ExecuteRunCommand(string parameter)
