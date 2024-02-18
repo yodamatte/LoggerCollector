@@ -8,7 +8,6 @@ public class Worker
     {
         Running = true;
 
-        var fileWriter = new FileWriter();
         var fileReader = new FileReader();
 
         fileReader.NewLineEvent += eventHandler;
