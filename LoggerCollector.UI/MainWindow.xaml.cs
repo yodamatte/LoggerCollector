@@ -10,8 +10,9 @@ namespace LoggerCollector
     {
         public MainWindow()
         {
-            DataContext = new MainViewModel();
             InitializeComponent();
+
+            DataContext = new MainViewModel();
         }
     }
 }

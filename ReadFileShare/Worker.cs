@@ -22,10 +22,10 @@ public class Worker
             Task writingTask = Task.Run(() => fileWriter.FillFileWithData(filePath, cancellationToken));
             Task readingTask = Task.Run(() => fileReader.ReadFromFile(filePath, cancellationToken));
 
-
             // Wait for either tasks to complete
-            await Task.WhenAny(writingTask, readingTask);
+            await Task.WhenAll(writingTask, readingTask);
 
+            Running = false;
             // Cancel the remaining task
             cts.Cancel();
         }

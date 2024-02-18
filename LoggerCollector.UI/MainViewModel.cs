@@ -1,18 +1,21 @@
 ﻿using Microsoft.Extensions.Logging;
 using ReadFileShare;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 
 namespace LoggerCollector.UI
 {
-    public class MainViewModel
+    public class MainViewModel : Observable
     {
         private readonly string _filePath = @"C:\Users\Matte\OneDrive\Skrivbord\TestData\Test.txt";
         public ObservableCollection<LogEntry> LogEntries { get; private set; } = new();
         public ICommand RunCommandAsync { get; }
         public ICommand CancelCommandAsync { get; }
+        public int LogCount { get; private set; }
 
-        private readonly CancellationTokenSource _cts;
+        private CancellationTokenSource _cts;
 
         private readonly Worker _worker;
         public MainViewModel()
@@ -20,40 +23,54 @@ namespace LoggerCollector.UI
             _worker = new Worker();
 
             RunCommandAsync = new RelayCommandAsync<string>(ExecuteRunCommand, CanRun);
-            CancelCommandAsync = new RelayCommandAsync<string>(ExecuteCancelCommand, CanCancel);
-
-            _cts = new();
+            CancelCommandAsync = new RelayCommand<string>(ExecuteCancelCommand, CanCancel);
+            LogEntries.CollectionChanged += LogEntries_CollectionChanged;
         }
 
-        private async Task<bool> CanCancel(string parameter)
+        private void LogEntries_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            LogCount = LogEntries.Count;
+            OnPropertyChanged(nameof(LogCount));
+        }
+
+        private bool CanCancel(string parameter)
+        {
+            Debug.WriteLine($"Can Cancel: {_worker.Running}");
             return _worker.Running;
         }
 
-        private async Task ExecuteCancelCommand(string parameter)
+        private void ExecuteCancelCommand(string parameter)
         {
+            Debug.WriteLine("Cancelling");
             _cts.Cancel();
         }
 
-        private async Task<bool> CanRun(string parameter)
+        private Task<bool> CanRun(string parameter)
         {
-            return !_worker.Running;
+            Debug.WriteLine($"Can Run: {!_worker.Running}");
+            return Task.FromResult(!_worker.Running);
         }
 
         private async Task ExecuteRunCommand(string parameter)
         {
+            Debug.WriteLine("Executing Run");
+            _cts = new();
             await _worker.Run(_filePath, _cts, HandleNewLine);
         }
 
-        private void HandleNewLine(object sender, string line)
+        private void HandleNewLine(object? sender, string line)
         {
-            LogEntry logEntry = new()
+            Debug.WriteLine($"Handling new line: {line}");
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                LogMessage = line,
-                LogLevel = LogLevel.Information,
-                LogSource = sender.ToString()
-            };
-            LogEntries.Add(logEntry);
+                LogEntry logEntry = new LogEntry
+                {
+                    LogMessage = line,
+                    LogLevel = LogLevel.Information,
+                    LogSource = sender.ToString()
+                };
+                LogEntries.Add(logEntry);
+            });
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿
-namespace ReadFileShare;
+using System.Diagnostics;
 
+namespace ReadFileShare;
 
 public class FileReader
 {
@@ -22,6 +23,7 @@ public class FileReader
 
     protected virtual void OnNewLineEvent(string line)
     {
+        Debug.WriteLine($"New line found: {line}");
         NewLineEvent?.Invoke(this, line);
     }
 
@@ -48,12 +50,6 @@ public class FileReader
                 {
                     OnNewLineEvent(line);
                 }
-            }
-            else
-            {
-                // No changes for 10 seconds, exit the loop
-                await Task.Delay(9000); // Wait for the remaining 9 seconds
-                break;
             }
         }
     }

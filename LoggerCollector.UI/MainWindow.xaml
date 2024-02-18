@@ -8,25 +8,33 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Button Content="Run" Command="{Binding RunCommandAsync}"/>
             <Button Content="Cancel" Command="{Binding CancelCommandAsync}"/>
+            <Label Content="LogCount:"/>
+            <TextBlock Text="{Binding LogCount}" Height="50" Width="300"/>
         </StackPanel>
 
-        <ItemsControl ItemsSource="{Binding LogEntries}" Grid.Row="1">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding LogMessage}" Height="50" Width="50"/>
-                        <TextBlock Text="{Binding LogSource}" Height="50" Width="50"/>
-                        <TextBlock Text="{Binding LogLevel}" Height="50" Width="50"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Row="1" Width="Auto">
+            <ItemsControl ItemsSource="{Binding LogEntries}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding LogMessage}" Height="50" Width="300" Margin="0,0,20,0"/>
+                                <TextBlock Text="{Binding LogSource}" Height="50" Width="300" Margin="0,0,20,0"/>
+                                <TextBlock Text="{Binding LogLevel}" Height="50" Width="300" Margin="0,0,20,0"/>
+                            </StackPanel>
+                            <Border BorderBrush="Black" BorderThickness="1"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        
     </Grid>
 </Window>
