@@ -29,31 +29,40 @@ public class FileReader
 
     public async Task ReadFromFile(string filePath, CancellationToken cancellationToken)
     {
+        using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+        using StreamReader reader = new(fs);
         try
         {
             while (true)
             {
-                using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                using StreamReader reader = new(fs);
+                // Ensure the cancellation token is checked before reading
+                cancellationToken.ThrowIfCancellationRequested();
+
                 await ReadAndProcessFileContent(reader, cancellationToken);
 
                 // Check for file modification
                 await WaitForFileModification(filePath, cancellationToken);
-
-                // Check for cancellation
-                cancellationToken.ThrowIfCancellationRequested();
             }
         }
-        catch (TaskCanceledException)
+        catch (OperationCanceledException)
         {
+            // Task was cancelled, exit the loop
+        }
+        catch (Exception ex)
+        {
+            // Handle other exceptions if necessary
+            Console.WriteLine($"An error occurred: {ex.Message}");
         }
     }
 
     private async Task ReadAndProcessFileContent(StreamReader reader, CancellationToken cancellationToken)
     {
         string line;
-        while ((line = await reader.ReadLineAsync(cancellationToken)) != null)
+        while ((line = await reader.ReadLineAsync()) != null)
         {
+            // Ensure the cancellation token is checked before processing each line
+            cancellationToken.ThrowIfCancellationRequested();
             OnNewLineEvent(line);
         }
     }

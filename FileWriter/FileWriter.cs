@@ -15,7 +15,7 @@ public class FileWriter
             await outputFile.WriteLineAsync(msg);
             await outputFile.FlushAsync(); // Flush the buffer to ensure data is written immediately
 
-            await Task.Delay(1000);
+            await Task.Delay(200);
             cancellationToken.ThrowIfCancellationRequested();
         }
     }
