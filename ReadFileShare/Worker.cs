@@ -16,15 +16,22 @@ public class Worker
         // Create cancellation token for the main thread
         CancellationToken cancellationToken = cts.Token;
 
-        // Start the writing and reading tasks concurrently
-        Task writingTask = Task.Run(() => fileWriter.FillFileWithData(filePath, cancellationToken));
-        Task readingTask = Task.Run(() => fileReader.ReadFromFile(filePath, cancellationToken));
+        try
+        {
+            // Start the writing and reading tasks concurrently
+            Task writingTask = Task.Run(() => fileWriter.FillFileWithData(filePath, cancellationToken));
+            Task readingTask = Task.Run(() => fileReader.ReadFromFile(filePath, cancellationToken));
 
-        // Wait for either tasks to complete
-        await Task.WhenAll(writingTask, readingTask);
-
-        Running = false;
-        // Cancel the remaining task
-        cts.Cancel();
+            // Wait for either tasks to complete
+            await Task.WhenAll(writingTask, readingTask);
+        }
+        catch (TaskCanceledException)
+        {
+            // Handle cancellation if needed
+        }
+        finally
+        {
+            Running = false;
+        }
     }
 }
