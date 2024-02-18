@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace LoggerCollector.UI
+namespace LoggerCollector.UI.Models
 {
     public class LogEntry
     {

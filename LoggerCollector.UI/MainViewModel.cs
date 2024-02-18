@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LoggerCollector.UI.Default;
+using LoggerCollector.UI.Models;
+using Microsoft.Extensions.Logging;
 using ReadFileShare;
 using System.Collections.ObjectModel;
 using System.Diagnostics;

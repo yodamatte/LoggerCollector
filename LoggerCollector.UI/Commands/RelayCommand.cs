@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace LoggerCollector.UI
+namespace LoggerCollector.UI.Commands
 {
     public class RelayCommand<T> : ICommand
     {

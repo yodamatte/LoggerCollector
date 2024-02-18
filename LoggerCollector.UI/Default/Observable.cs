@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LoggerCollector.UI
+namespace LoggerCollector.UI.Default
 {
     public class Observable : INotifyPropertyChanged
     {
