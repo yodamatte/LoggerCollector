@@ -11,10 +11,10 @@ public class FileWriter
         while (!cancellationToken.IsCancellationRequested)
         {
             await outputFile.WriteLineAsync($"Test{i++}");
-            await outputFile.FlushAsync(); // Flush the buffer to ensure data is written immediately
+            await outputFile.FlushAsync(cancellationToken); // Flush the buffer to ensure data is written immediately
 
             // Introduce a delay to simulate writing process
-            await Task.Delay(100);
+            await Task.Delay(100, CancellationToken.None);
         }
     }
 }

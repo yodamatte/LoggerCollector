@@ -66,11 +66,11 @@ namespace LoggerCollector.UI
             Debug.WriteLine($"Handling new line: {line}");
             Application.Current.Dispatcher.Invoke(() =>
             {
-                LogEntry logEntry = new LogEntry
+                LogEntry logEntry = new()
                 {
                     LogMessage = line,
                     LogLevel = LogLevel.Information,
-                    LogSource = sender.ToString()
+                    LogSource = sender?.ToString()
                 };
                 LogEntries.Add(logEntry);
             });

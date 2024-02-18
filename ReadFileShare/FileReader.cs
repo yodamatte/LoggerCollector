@@ -13,10 +13,10 @@ public class FileReader
         using FileStream fs = new(filePath, FileMode.Open, FileAccess.ReadWrite);
         using StreamReader reader = new(fs);
 
-        string line;
+        string? line;
         while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
         {
-            line = await reader.ReadLineAsync();
+            line = await reader.ReadLineAsync(cancellationToken);
             OnNewLineEvent(line);
         }
     }
@@ -33,12 +33,12 @@ public class FileReader
         using StreamReader reader = new(fs);
 
         DateTime lastModified = File.GetLastWriteTime(filePath);
-        string line = null;
+        string line;
 
         // Continue reading until cancellation is requested or no changes for 10 seconds
         while (!cancellationToken.IsCancellationRequested)
         {
-            await Task.Delay(1000); // Check for changes every second
+            await Task.Delay(1000, CancellationToken.None); // Check for changes every second
 
             DateTime currentModified = File.GetLastWriteTime(filePath);
             if (currentModified != lastModified)
@@ -46,7 +46,7 @@ public class FileReader
                 // File has been modified, read the new content
                 lastModified = currentModified;
                 fs.Seek(0, SeekOrigin.Begin); // Move the stream pointer to the beginning
-                while ((line = await reader.ReadLineAsync()) != null)
+                while ((line = await reader.ReadLineAsync(CancellationToken.None)) != null)
                 {
                     OnNewLineEvent(line);
                 }
