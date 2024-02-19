@@ -8,9 +8,9 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
-namespace LoggerCollector.UI
+namespace LoggerCollector.UI.ViewModels
 {
-    public class MainViewModel : Observable
+    public class LoggerViewModel : Observable
     {
         private readonly string _filePath = @"C:\Users\Matte\OneDrive\Skrivbord\TestData\Test.txt";
         public ObservableCollection<LogEntry> LogEntries { get; private set; } = new();
@@ -21,7 +21,7 @@ namespace LoggerCollector.UI
         private CancellationTokenSource _cts;
 
         private readonly Worker _worker;
-        public MainViewModel()
+        public LoggerViewModel()
         {
             _worker = new Worker();
 

@@ -6,9 +6,9 @@ namespace DatabaseReader
     {
         static void Main(string[] args)
         {
-            string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=Logger;Integrated Security=True;";
+            string connectionString = "Server=localhost\\SQLEXPRESS;Database=TEST.eSIGN;Integrated Security=True;";
 
-            DatabaseLoggerConfigurationHelper db = new DatabaseLoggerConfigurationHelper();
+            DatabaseLoggerConfigurationHelper db = new();
             var tables = db.GetAllDataTables(connectionString);
         }
     }

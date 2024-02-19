@@ -1,4 +1,4 @@
-﻿using LoggerCollector.UI;
+﻿using LoggerCollector.UI.ViewModels;
 using System.Windows;
 
 namespace LoggerCollector

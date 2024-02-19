@@ -3,38 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LoggerCollector"
+        xmlns:local="clr-namespace:LoggerCollector" 
+        xmlns:view="clr-namespace:LoggerCollector.UI.View" 
+        xmlns:viewmodels="clr-namespace:LoggerCollector.UI.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Content="Run" Command="{Binding RunCommandAsync}"/>
-            <Button Content="Cancel" Command="{Binding CancelCommandAsync}"/>
-            <Label Content="LogCount:"/>
-            <TextBlock Text="{Binding LogCount}" Height="50" Width="300"/>
-        </StackPanel>
-
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Row="1" Width="Auto">
-            <ItemsControl ItemsSource="{Binding LogEntries}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding LogMessage}" Height="50" Width="300" Margin="0,0,20,0"/>
-                                <TextBlock Text="{Binding LogSource}" Height="50" Width="300" Margin="0,0,20,0"/>
-                                <TextBlock Text="{Binding LogLevel}" Height="50" Width="300" Margin="0,0,20,0"/>
-                            </StackPanel>
-                            <Border BorderBrush="Black" BorderThickness="1"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <view:DatabaseConfigurationView DataContext="{Binding DatabaseConfigurationViewModel}" Grid.Column="0"/>
+        <view:LoggerView DataContext="{Binding LoggerViewModel}" Grid.Column="1"/>
     </Grid>
 </Window>
