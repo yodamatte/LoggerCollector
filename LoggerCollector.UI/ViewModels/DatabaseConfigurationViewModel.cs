@@ -1,6 +1,7 @@
 ﻿using DatabaseReader;
 using LoggerCollector.UI.Commands;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Windows.Input;
 
 namespace LoggerCollector.UI.ViewModels
@@ -16,7 +17,7 @@ namespace LoggerCollector.UI.ViewModels
         public DatabaseConfigurationViewModel() 
         {
             SaveCommand = new RelayCommand<string>(Save, CanSave);
-            string connectionString = "Server=localhost\\SQLEXPRESS;Database=TEST.eSIGN;Integrated Security=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["Test"].ConnectionString;
 
             DatabaseLoggerConfigurationHelper db = new();
             var tables = db.GetAllDataTables(connectionString);

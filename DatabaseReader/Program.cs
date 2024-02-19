@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Configuration;
+using System.Data.SqlClient;
 
 namespace DatabaseReader
 {
@@ -6,7 +7,7 @@ namespace DatabaseReader
     {
         static void Main(string[] args)
         {
-            string connectionString = "Server=localhost\\SQLEXPRESS;Database=TEST.eSIGN;Integrated Security=True;";
+            string connectionString = ConfigurationManager.ConnectionStrings["Test"].ConnectionString;
 
             DatabaseLoggerConfigurationHelper db = new();
             var tables = db.GetAllDataTables(connectionString);
