@@ -9,8 +9,8 @@ namespace DatabaseReader
         {
             string connectionString = ConfigurationManager.ConnectionStrings["Test"].ConnectionString;
 
-            DatabaseLoggerConfigurationHelper db = new();
-            var tables = db.GetAllDataTables(connectionString);
+            DatabaseLoggerConfigurationHelper db = new(connectionString);
+            var tables = db.GetAllDataTables();
         }
     }
 }

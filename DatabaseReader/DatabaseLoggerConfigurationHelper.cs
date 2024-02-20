@@ -4,6 +4,12 @@ namespace DatabaseReader
 {
     public class DatabaseLoggerConfigurationHelper
     {
+        private readonly string _connectionString;
+
+        public DatabaseLoggerConfigurationHelper(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
 
         private string GetDatabaseNameFromConnectionString(string connectionString)
         {
@@ -11,12 +17,10 @@ namespace DatabaseReader
             return builder.InitialCatalog;
         }
 
-        public List<TableInformation> GetAllDataTables(string connectionString)
+        public List<TableInformation> GetAllDataTables()
         {
             List<TableInformation> tables = new();
-            // Create a SqlConnection using the connection string
-            using SqlConnection connection = new(connectionString);
-            string databaseName = GetDatabaseNameFromConnectionString(connectionString);
+            using SqlConnection connection = new(_connectionString);
             try
             {
                 // Open the connection
@@ -37,6 +41,46 @@ namespace DatabaseReader
                     {
                         TableInformation ti = new(reader.GetString(0), reader.GetString(1));
                         tables.Add(ti);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No tables found in the specified database.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+            return tables;
+        }
+
+        public List<TableColumns> GetAllFields(string tableName)
+        {
+            List<TableColumns> tables = new();
+
+            using SqlConnection connection = new(_connectionString);
+            try
+            {
+                connection.Open();
+
+                // Create a SqlCommand with the SQL query
+                string query = "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = @TableName;";
+                using SqlCommand command = new(query, connection);
+                command.Parameters.AddWithValue("@TableName", tableName);
+
+                using SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+
+                    while (reader.Read())
+                    {
+                        bool isNullableBool = false;
+                        string isNullable = reader.GetString(2);
+                        if (isNullable == "YES")
+                            isNullableBool = true;
+                        TableColumns tc = new(reader.GetString(0), isNullableBool, reader.GetString(1));
+                        tables.Add(tc);
                     }
                 }
                 else
