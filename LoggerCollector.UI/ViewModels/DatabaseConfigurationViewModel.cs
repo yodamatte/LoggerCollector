@@ -12,7 +12,7 @@ namespace LoggerCollector.UI.ViewModels
     {
         public ObservableCollection<TableInformation> Tables { get; private set; }
 
-        public ObservableCollection<TableColumns> Columns { get; private set; }
+        public ObservableCollection<TableColumns> Columns { get; private set; } = new();
 
         public string DatabaseConfigurationName { get; set; }
 
@@ -58,7 +58,11 @@ namespace LoggerCollector.UI.ViewModels
 
         private void LoadColumns(string tableName)
         {
-            Columns = new(_databaseLoggerConfigurationHelper.GetAllFields(tableName));
+            Columns.Clear();
+            foreach (var column in _databaseLoggerConfigurationHelper.GetAllFields(tableName))
+            {
+                Columns.Add(column);
+            }
         }
 
         public ICommand SaveCommand { get; }
