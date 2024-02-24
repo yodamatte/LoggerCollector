@@ -2,17 +2,10 @@
 
 namespace LoggerCollector.UI.ViewModels
 {
-    public class TabViewModel
+    public class TabViewModel(string header, Observable content)
     {
-        public TabViewModel(string header, Observable content)
-        {
-            Header = header;
-            Content = content;
-        }
+        public string Header { get; } = header;
 
-        public string Header { get; }
-
-        public Observable Content { get; }
-
+        public Observable Content { get; } = content;
     }
 }
