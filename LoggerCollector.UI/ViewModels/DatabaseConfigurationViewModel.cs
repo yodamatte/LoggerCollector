@@ -93,6 +93,7 @@ namespace LoggerCollector.UI.ViewModels
 
 
             Configurations.Add(config);
+            SelectedConfig = config;
         }
     }
 }

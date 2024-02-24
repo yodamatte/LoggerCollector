@@ -12,11 +12,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
+            <Label Content="LogCount:"/>
+            <TextBlock Text="{Binding LogCount}"/>
+
             <Button Content="Run" Command="{Binding RunCommandAsync}"/>
             <Button Content="Cancel" Command="{Binding CancelCommandAsync}"/>
-            <Label Content="LogCount:"/>
-            <TextBlock Text="{Binding LogCount}" Height="50" Width="300"/>
         </StackPanel>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Row="1" Width="Auto">
