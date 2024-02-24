@@ -10,13 +10,13 @@ namespace LoggerCollector.UI.ViewModels;
 
 public class DatabaseConfigurationViewModel : Observable
 {
-    public ObservableCollection<TableInformation> Tables { get; private set; }
+    public ObservableCollection<TableInformation> Tables { get; private set; } = [];
 
-    public ObservableCollection<TableColumns> Columns { get; private set; } = new();
+    public ObservableCollection<TableColumns> Columns { get; private set; } = [];
 
     public string DatabaseConfigurationName { get; set; }
 
-    public ObservableCollection<DatabaseConfiguration> Configurations { get; set; } = new();
+    public ObservableCollection<DatabaseConfiguration> Configurations { get; set; } = [];
 
 
     //TODO Cleanup this mess
@@ -54,7 +54,7 @@ public class DatabaseConfigurationViewModel : Observable
         }
     }
 
-    private readonly DatabaseLoggerConfigurationHelper _databaseLoggerConfigurationHelper;
+    private DatabaseLoggerConfigurationHelper _databaseLoggerConfigurationHelper;
 
     private void LoadColumns(string tableName)
     {
@@ -70,11 +70,17 @@ public class DatabaseConfigurationViewModel : Observable
     public DatabaseConfigurationViewModel() 
     {
         SaveCommand = new RelayCommand<string>(Save, CanSave);
-        var connectionString = ConfigurationManager.ConnectionStrings["Test"].ConnectionString;
+    }
 
+    public async Task Load()
+    {
+        var connectionString = ConfigurationManager.ConnectionStrings["Test"].ConnectionString;
         _databaseLoggerConfigurationHelper = new(connectionString);
         var tables = _databaseLoggerConfigurationHelper.GetAllDataTables();
-        Tables = new(tables);
+        foreach (var table in tables) 
+        {
+            Tables.Add(table);
+        }
     }
 
     private bool CanSave(string obj)

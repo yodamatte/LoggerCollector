@@ -19,11 +19,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <view:RibbonView Grid.Row="0"/>
 
         <TabControl ItemsSource="{Binding Tabs}" Grid.Row="1" SelectedItem="{Binding SelectedTab}">
         </TabControl>
+
+        <view:StatusBar Height="30" VerticalAlignment="Bottom" Grid.Row="2" DataContext="{Binding StatusBarViewModel}"/>
     </Grid>
 </Window>

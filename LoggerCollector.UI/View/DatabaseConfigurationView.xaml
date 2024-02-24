@@ -14,6 +14,7 @@
 
         <Label Content="Name"/>
         <TextBox Text="{Binding DatabaseConfigurationName}"/>
+        <Label Content="Table"/>
         <ComboBox ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}"/>
 
         <DataGrid ItemsSource="{Binding Columns}" AutoGenerateColumns="True"/>
