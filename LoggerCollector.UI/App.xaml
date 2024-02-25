@@ -8,8 +8,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/TabItemStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <services:StatusBarService x:Key="StatusBarServiceInstance" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
