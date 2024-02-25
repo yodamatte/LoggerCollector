@@ -17,7 +17,8 @@ public partial class App : Application
 
         builder.RegisterType<MainWindow>().AsSelf();
         builder.RegisterType<MainViewModel>().AsSelf();
-        builder.RegisterType<StatusBarService>().As<IStatusBarService>();
+        builder.RegisterType<StatusBarService>().As<IStatusBarService>().SingleInstance();
+        builder.RegisterType<LoggerNavigationService>().As<ILoggerNavigationService>();
 
         var container = builder.Build();
 
