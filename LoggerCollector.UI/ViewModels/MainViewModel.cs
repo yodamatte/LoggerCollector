@@ -1,5 +1,6 @@
 ﻿using LoggerCollector.UI.Commands;
 using LoggerCollector.UI.Default;
+using LoggerCollector.UI.Services;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
@@ -13,16 +14,17 @@ public class MainViewModel : Observable
 
     public ICommand CloseTabCommand { get; }
 
-    public StatusBarViewModel StatusBarViewModel { get; }
+    public IStatusBarService StatusBarService { get; }
 
     //Implement a better base class than observable
     public ObservableCollection<TabViewModel> Tabs { get; set; } = [];
 
     public TabViewModel? SelectedTab { get; set; } = null;
 
-    public MainViewModel() 
+    public MainViewModel(IStatusBarService statusBarService) 
     {
-        StatusBarViewModel = new();
+        StatusBarService = statusBarService;
+        StatusBarService.StatusMessage = "Init";
         NavigateCommand = new RelayCommand<string>(Navigate, CanNavigate);
         CloseTabCommand = new RelayCommand<TabViewModel>(CloseTab);
     }
@@ -46,9 +48,9 @@ public class MainViewModel : Observable
             var config = new DatabaseConfigurationViewModel();
             var task = Task.Run(config.Load);
 
-            StatusBarViewModel.UpdateStatus("Loading");
+            StatusBarService.StatusMessage = "Loading";
             await task.ConfigureAwait(false);
-            StatusBarViewModel.UpdateStatus("Done");
+            StatusBarService.StatusMessage = "Done";
             content = config;
         }
         else if (s == "Logger")

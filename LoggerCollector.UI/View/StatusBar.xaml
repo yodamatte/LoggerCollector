@@ -7,14 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     
-
     <StackPanel>
         <StatusBar>
             <StatusBarItem>
-                <TextBlock x:Name="StatusText" Text="{Binding StatusText}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+                <TextBlock x:Name="StatusMessage" Text="{Binding StatusBarService.StatusMessage}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
             </StatusBarItem>
         </StatusBar>
-        <Popup x:Name="myPopup" Placement="Bottom" PlacementTarget="{Binding ElementName=StatusText}">
+        <Popup x:Name="myPopup" Placement="Bottom" PlacementTarget="{Binding ElementName=StatusMessage}">
             <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="10">
                 <TextBlock Text="This is a Popup" />
             </Border>

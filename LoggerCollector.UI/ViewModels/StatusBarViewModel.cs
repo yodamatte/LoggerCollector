@@ -1,29 +1,30 @@
 ﻿using LoggerCollector.UI.Default;
+using LoggerCollector.UI.Services;
+using System.ComponentModel;
 
 namespace LoggerCollector.UI.ViewModels
 {
-    public enum StatusBarStatus
-    {
-        Normal,
-        Loading
-    }
-
     public class StatusBarViewModel : Observable
     {
-        private string statusText;
-        public string StatusText
+        private readonly IStatusBarService _statusBarService;
+
+        public StatusBarViewModel(IStatusBarService statusBarService)
         {
-            get => statusText;
-            private set
+            _statusBarService = statusBarService;
+            _statusBarService.PropertyChanged += StatusBarService_PropertyChanged;
+        }
+
+        private void StatusBarService_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(IStatusBarService.StatusMessage))
             {
-                statusText = value;
-                OnPropertyChanged(nameof(StatusText));
+                OnPropertyChanged(nameof(StatusMessage));
             }
         }
 
-        public void UpdateStatus(string newStatus)
+        public string StatusMessage
         {
-            StatusText = newStatus;
+            get { return _statusBarService.StatusMessage; }
         }
     }
 }

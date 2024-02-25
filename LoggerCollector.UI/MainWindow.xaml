@@ -27,6 +27,6 @@
         <TabControl ItemsSource="{Binding Tabs}" Grid.Row="1" SelectedItem="{Binding SelectedTab}">
         </TabControl>
 
-        <view:StatusBar Height="30" VerticalAlignment="Bottom" Grid.Row="2" DataContext="{Binding StatusBarViewModel}"/>
+        <view:StatusBar Height="30" VerticalAlignment="Bottom" Grid.Row="2"/>
     </Grid>
 </Window>
