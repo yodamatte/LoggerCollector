@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using DatabaseReader.Converter;
+using System.Data.SqlClient;
 
 namespace DatabaseReader
 {
@@ -75,11 +76,10 @@ namespace DatabaseReader
 
                     while (reader.Read())
                     {
-                        bool isNullableBool = false;
+                        var datatype = reader.GetString(1);
                         string isNullable = reader.GetString(2);
-                        if (isNullable == "YES")
-                            isNullableBool = true;
-                        TableColumns tc = new(reader.GetString(0), isNullableBool, reader.GetString(1));
+
+                        TableColumns tc = new(reader.GetString(0), SQLServerToCSharpConverter.ConvertToCSharpType(datatype , isNullable));
                         tables.Add(tc);
                     }
                 }
